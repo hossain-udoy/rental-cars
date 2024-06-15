@@ -42,11 +42,16 @@ const createBookingInToDB = async (
 
 // get all bookings admin
 const getAllBookingInToDB = async (query: Record<string, unknown>) => {
-	const result = await Booking.find(query).populate("user").populate("car");
-	if (result.length === 0) {
-		throw new AppError(httpStatus.NOT_FOUND,'No Data Found')
+	const queryData = query || "";
+
+	try {
+		const result = await Booking.find(queryData)
+			.populate("user")
+			.populate("car");
+		return result;
+	} catch (err) {
+		throw new AppError(httpStatus.NOT_FOUND, "No Data Found");
 	}
-	return result;
 };
 
 // get user booking
